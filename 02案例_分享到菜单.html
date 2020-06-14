@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>案例-分享到菜单</title>
+</head>
+<style>
+    #div1 {
+        width: 100px;
+        height: 200px;
+        background-color: gray;
+        position: absolute;
+        top: 40px;
+        left: -100px;
+    }
+
+    #div1 span {
+        width: 20px;
+        height: 60px;
+        background-color: orange;
+        position: absolute;
+        top: 70px;
+        left: 100px;
+        line-height: 20px;
+    }
+</style>
+<script>
+    /*
+        鼠标移入
+            -100  => 0
+        鼠标移出
+            0 => -100
+    */
+
+    window.onload = function () {
+        var oDiv = document.getElementById("div1");
+        oDiv.onmousemove = function () {
+            startMove(0);
+        }
+
+        oDiv.onmouseout = function () {
+            startMove(-100);
+        }
+    }
+
+    var timer = null;
+    function startMove(iTarget) {
+        var oDiv = document.getElementById("div1");
+        var speed = 5;
+        if(oDiv.offsetLeft > iTarget) {
+            speed = -Math.abs(speed);
+        } else {
+            speed = Math.abs(speed);
+        }
+        clearInterval(timer);
+        timer = setInterval(() => {
+            // 运动 和 停止 分开
+            if (oDiv.offsetLeft == iTarget) {
+                clearInterval(timer);
+            } else {
+                oDiv.style.left = oDiv.offsetLeft + speed + 'px';
+            }
+        }, 30);
+    }
+
+    // function startMove2() {
+    //     var oDiv = document.getElementById("div1");
+    //     var speed = -5;
+    //     clearInterval(timer);
+    //     timer = setInterval(() => {
+    //         // 运动 和 停止 分开
+    //         if (oDiv.offsetLeft == -100) {
+    //             clearInterval(timer);
+    //         } else {
+    //             oDiv.style.left = oDiv.offsetLeft + speed + 'px';
+    //         }
+    //     }, 30);
+    // }
+</script>
+
+<body>
+    <div id="div1">
+        <span>分享到</span>
+    </div>
+</body>
+
+</html>
