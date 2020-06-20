@@ -14,15 +14,15 @@
         }
     </style>
     <script>
-        window.onload = function () {
+        window.onload = function() {
             var aDivs = document.getElementsByTagName('div');
 
             for (let i = 0; i < aDivs.length; i++) {
-                aDivs[i].onmouseover = function () {
+                aDivs[i].onmouseover = function() {
                     startMove(this, 300);
                 }
 
-                aDivs[i].onmouseout = function () {
+                aDivs[i].onmouseout = function() {
                     startMove(this, 100);
                 }
             }
@@ -30,17 +30,21 @@
 
         /*
             让谁进行运动不确定， node参数
+            多物体运动，实际上只有一个定时器。
+            让每一个运动的物体都有一个定时器。
         */
-        var timer = null;
+
+        // 多物体运动 不用公用一个全局变量 timer
+        // var timer = null;
 
         function startMove(node, iTarget) {
-            clearInterval(timer);
-            timer = setInterval(function () {
+            clearInterval(node.timer);
+            node.timer = setInterval(function() {
                 var speed = (iTarget - node.offsetWidth) / 8;
                 speed = speed > 0 ? Math.ceil(speed) : Math.floor(speed);
 
                 if (node.offsetWidth == iTarget) {
-                    clearInterval(timer);
+                    clearInterval(node.timer);
                 } else {
                     node.style.width = node.offsetWidth + speed + 'px';
                 }
