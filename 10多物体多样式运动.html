@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>多物体多样式运动</title>
+    <style>
+        div {
+            width: 100px;
+            height: 100px;
+            background-color: red;
+            margin: 50px;
+        }
+    </style>
+    <script>
+        window.onload = function () {
+            var aDivs = document.getElementsByTagName('div');
+            aDivs[0].onclick = function () {
+                // 宽变300
+                startMove(this, 'width', 300);
+            }
+
+            aDivs[1].onclick = function () {
+                // 高变300
+                startMove(this, 'height', 100);
+            }
+
+            aDivs[2].onclick = function () {
+                // marginLeft => 300
+                startMove(this, 'marginLeft', 200);
+            }
+
+            aDivs[3].onclick = function () {
+                // fontSize => 100
+                startMove(this, 'fontSize', 50);
+            }
+        }
+
+
+        // startMove(oDiv, "width", 300); => 调用示例
+        function startMove(node, attr, iTarget) {
+            clearInterval(node.timer);
+            node.timer = setInterval(function () {
+                // 计算速度
+                var iCur = parseInt(getStyle(node, attr));
+                var speed = (iTarget - iCur) / 8;
+                speed = speed > 0 ? Math.ceil(speed) : Math.floor(speed);
+
+                if (iCur == iTarget) {
+                    clearInterval(node.timer)
+                } else {
+                    node.style[attr] = iCur + speed + 'px';
+                }
+            }, 30);
+        }
+
+        // 获取当前有效样式浏览器兼容的写法
+        function getStyle(node, cssStr) {
+            return node.currentStyle ? node.currentStyle[cssStr] : getComputedStyle(node)[cssStr];
+        }
+    </script>
+</head>
+
+<body>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div>div文本</div>
+
+</body>
+
+</html>

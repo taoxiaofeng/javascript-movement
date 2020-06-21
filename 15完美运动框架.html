@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>完美运动框架</title>
+    <style>
+        #div1 {
+            width: 100px;
+            height: 100px;
+            background-color: red;
+        }
+    </style>
+    <script>
+        window.onload = function () {
+            var oDivs = document.getElementById('div1');
+
+            /*
+                链式运动：
+                    在第一个动画结束的时候，开始第二个动画
+                [注] 关键点 => 找到第一个动画结束的时候    
+            */
+            oDivs.onmouseover = function () {
+                // 宽 高 透明度 同时改变
+                startMove(this, {
+                    width: 300,
+                    height: 300,
+                    opacity: 30
+                }, function() {
+                    console.log('动画结束')
+                });
+            }
+
+            oDivs.onmouseout = function () {
+                // 宽 高 透明度 同时改变
+                startMove(this, {
+                    width: 100,
+                    height: 100,
+                    opacity: 100
+                });
+
+            }
+
+            /*
+                回调函数： 我们把函数当做参数传入，并且在合适调用的方式， 叫做回调函数。
+                在别的编程语言（C语言，C++）叫做函数指针
+
+                问题：其中有一个动画到达目的值，就把定时器关闭掉了。
+                解决：当所有的动画到达目的值，才能关闭定时器。
+            */
+
+
+            function startMove(node, cssObj, complete) { // complete = show
+                clearInterval(node.timer);
+                node.timer = setInterval(function () {
+                    var isEnd = true; // 假设所有的动画都到达目的值
+                    for (const attr in cssObj) {
+                        if (cssObj.hasOwnProperty(attr)) {
+                            // 计算速度
+                            // var iCur = parseInt(getStyle(node, attr));
+                            var iCur = null;
+                            var iTarget = cssObj[attr];
+                            if (attr == 'opacity') {
+                                iCur = parseInt(parseFloat(getStyle(node, 'opacity')) * 100);
+                            } else {
+                                iCur = parseInt(getStyle(node, attr));
+                            }
+
+                            var speed = (iTarget - iCur) / 8;
+                            speed = speed > 0 ? Math.ceil(speed) : Math.floor(speed);
+
+                            if (attr == 'opacity') {
+                                iCur += speed;
+                                node.style.opacity = iCur / 100;
+                                node.style.filter = 'alpha(opacity=' + iCur + ')';
+                            } else {
+                                node.style[attr] = iCur + speed + 'px';
+                            }
+
+                            if (iCur != iTarget) {
+                                isEnd = false;
+                            }
+                        }
+                    }
+                    if (isEnd) {
+                        if (complete) {
+                            complete.call(node);
+                        }
+                    }
+                }, 30);
+            }
+
+            // 获取当前有效样式浏览器兼容的写法
+            function getStyle(node, cssStr) {
+                return node.currentStyle ? node.currentStyle[cssStr] : getComputedStyle(node)[cssStr];
+            }
+        }
+    </script>
+</head>
+
+<body>
+    <div id="div1"></div>
+
+</body>
+
+</html>
