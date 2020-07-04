@@ -25,9 +25,9 @@
                 // 宽 高 透明度 同时改变
                 startMove(this, {
                     width: 300,
-                    height: 300,
+                    height: 102,
                     opacity: 30
-                }, function() {
+                }, function () {
                     console.log('动画结束')
                 });
             }
@@ -69,7 +69,6 @@
 
                             var speed = (iTarget - iCur) / 8;
                             speed = speed > 0 ? Math.ceil(speed) : Math.floor(speed);
-
                             if (attr == 'opacity') {
                                 iCur += speed;
                                 node.style.opacity = iCur / 100;
@@ -77,13 +76,13 @@
                             } else {
                                 node.style[attr] = iCur + speed + 'px';
                             }
-
                             if (iCur != iTarget) {
                                 isEnd = false;
                             }
                         }
                     }
                     if (isEnd) {
+                        clearInterval(node.timer);
                         if (complete) {
                             complete.call(node);
                         }

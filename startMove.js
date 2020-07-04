@@ -1,4 +1,3 @@
-
 function startMove(node, cssObj, complete) { // complete = show
     clearInterval(node.timer);
     node.timer = setInterval(function () {
@@ -17,7 +16,6 @@ function startMove(node, cssObj, complete) { // complete = show
 
                 var speed = (iTarget - iCur) / 8;
                 speed = speed > 0 ? Math.ceil(speed) : Math.floor(speed);
-
                 if (attr == 'opacity') {
                     iCur += speed;
                     node.style.opacity = iCur / 100;
@@ -25,20 +23,19 @@ function startMove(node, cssObj, complete) { // complete = show
                 } else {
                     node.style[attr] = iCur + speed + 'px';
                 }
-
                 if (iCur != iTarget) {
                     isEnd = false;
                 }
             }
         }
         if (isEnd) {
+            clearInterval(node.timer);
             if (complete) {
                 complete.call(node);
             }
         }
     }, 30);
 }
-
 
 // 获取当前有效样式浏览器兼容的写法
 function getStyle(node, cssStr) {
